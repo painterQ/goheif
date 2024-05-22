@@ -1,4 +1,4 @@
-module github.com/jdeng/goheif
+module github.com/painterQ/goheif
 
 go 1.21.8
 

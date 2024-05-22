@@ -24,9 +24,10 @@ package heif
 import (
 	"errors"
 	"fmt"
-	"github.com/jdeng/goheif/heif/bmff"
 	"io"
 	"log"
+
+	"github.com/painterQ/goheif/heif/bmff"
 )
 
 // File represents a HEIF file.

@@ -1,9 +1,11 @@
 # GoHeif - A go gettable decoder/converter for HEIC based on libde265
 
+fork from github.com/jdeng/goheif, fix some bug and init golang module
+
 ## Install
 - `heic2jpg` to convert HEIC files to JPG preserving exif 
 
-``` go get github.com/jdeng/goheif/...```
+``` go get github.com/painterQ/goheif/...```
 
 - Tested
   - Mac OS X (High Sierra) 
