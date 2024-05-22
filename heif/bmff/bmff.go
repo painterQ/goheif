@@ -56,6 +56,7 @@ type BoxType [4]byte
 var (
 	TypeFtyp = BoxType{'f', 't', 'y', 'p'}
 	TypeMeta = BoxType{'m', 'e', 't', 'a'}
+	TypeFree = BoxType{'f', 'r', 'e', 'e'}
 )
 
 func (t BoxType) String() string { return string(t[:]) }
@@ -234,9 +235,17 @@ func (r *Reader) ReadAndParseBox(typ BoxType) (Box, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error reading %q box: %v", typ, err)
 	}
-	if box.Type() != typ {
-		return nil, fmt.Errorf("error reading %q box: got box type %q instead", typ, box.Type())
+
+	for box.Type() != typ {
+		box, err = r.ReadBox()
+		if err != nil {
+			return nil, fmt.Errorf("error reading %q box: %v", typ, err)
+		}
 	}
+
+	//if box.Type() != typ {
+	//	return nil, fmt.Errorf("error reading %q box: got box type %q instead", typ, box.Type())
+	//}
 	pbox, err := box.Parse()
 	if err != nil {
 		return nil, fmt.Errorf("error parsing read %q box: %v", typ, err)

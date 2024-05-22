@@ -3,9 +3,13 @@ package goheif
 import (
 	"bytes"
 	"image"
+	"image/png"
 	"io"
 	"io/ioutil"
+	"os"
 	"testing"
+
+	"github.com/nfnt/resize"
 )
 
 func TestFormatRegistered(t *testing.T) {
@@ -57,4 +61,35 @@ func benchEncoding(b *testing.B, safe bool) {
 		Decode(r)
 		r.Seek(0, io.SeekStart)
 	}
+}
+
+func TestHEIC(t *testing.T) {
+	fileName := "./testdata/camel.heic" //IMG_20240522_142801.HEIC
+	toFile := "mi.png"
+	file, _ := os.Open(fileName)
+	file2, _ := os.Open(toFile)
+	defer file.Close()
+	defer file2.Close()
+
+	img0, err := Decode(file)
+	if err != nil {
+		panic(err)
+	}
+
+	newImg := resize.Resize(100, 100, img0, resize.Bilinear)
+
+	t.Log(newImg.Bounds().String())
+
+	ni := image.NewRGBA(image.Rect(0, 0, 100, 100))
+	for i := 0; i < 100; i++ {
+		for j := 0; j < 100; j++ {
+			ni.Set(i, j, newImg.At(i, j))
+		}
+	}
+
+	err = png.Encode(file2, ni)
+	if err != nil {
+		panic(err)
+	}
+	t.Log("success")
 }
